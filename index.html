@@ -1,905 +1,824 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Amazon FBA Command Center</title>
 <style>
   :root {
-    --ink: oklch(18% 0.02 250);
-    --ink-light: oklch(35% 0.02 250);
-    --ink-muted: oklch(55% 0.01 250);
+    --bg: oklch(97% 0.008 250);
     --surface: oklch(100% 0 0);
-    --surface-alt: oklch(97% 0.008 250);
-    --surface-raised: oklch(100% 0 0);
+    --surface2: oklch(95% 0.008 250);
+    --ink: oklch(18% 0.02 250);
+    --ink2: oklch(35% 0.02 250);
+    --ink3: oklch(55% 0.01 250);
     --border: oklch(90% 0.005 250);
     --accent: oklch(38% 0.12 252);
-    --accent-light: oklch(92% 0.03 252);
-    --accent-mid: oklch(55% 0.1 252);
+    --accent-l: oklch(92% 0.03 252);
     --green: oklch(56% 0.16 160);
     --green-bg: oklch(95% 0.03 150);
-    --green-border: oklch(80% 0.08 150);
     --yellow: oklch(70% 0.14 82);
     --yellow-bg: oklch(96% 0.04 85);
-    --yellow-border: oklch(84% 0.1 82);
     --red: oklch(48% 0.18 20);
     --red-bg: oklch(95% 0.03 20);
-    --red-border: oklch(80% 0.08 20);
     --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.04);
-    --shadow-md: 0 4px 16px oklch(0% 0 0 / 0.06), 0 1px 3px oklch(0% 0 0 / 0.04);
-    --shadow-lg: 0 12px 40px oklch(0% 0 0 / 0.08), 0 2px 8px oklch(0% 0 0 / 0.04);
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 16px;
-    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-    --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow: 0 4px 16px oklch(0% 0 0 / 0.06), 0 1px 3px oklch(0% 0 0 / 0.04);
+    --radius: 10px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    --mono: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    --tr: 180ms cubic-bezier(0.4,0,0.2,1);
   }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { font-size: 15px; -webkit-font-smoothing: antialiased; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-    background: var(--surface-alt);
-    color: var(--ink);
-    line-height: 1.55;
-    min-height: 100vh;
+  [data-theme="dark"] {
+    --bg: oklch(12% 0.01 250);
+    --surface: oklch(16% 0.01 250);
+    --surface2: oklch(20% 0.01 250);
+    --ink: oklch(92% 0.01 250);
+    --ink2: oklch(78% 0.01 250);
+    --ink3: oklch(58% 0.01 250);
+    --border: oklch(26% 0.01 250);
+    --accent-l: oklch(28% 0.08 252);
+    --green-bg: oklch(22% 0.04 150);
+    --yellow-bg: oklch(24% 0.04 85);
+    --red-bg: oklch(22% 0.04 20);
+    --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.2);
+    --shadow: 0 4px 16px oklch(0% 0 0 / 0.3);
   }
-
-  /* ─── Header ─── */
-  .header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: var(--shadow-sm);
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:15px;-webkit-font-smoothing:antialiased}
+  body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh}
+  .header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.5rem;height:52px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:var(--shadow-sm)}
+  .header-l{display:flex;align-items:center;gap:0.75rem}
+  .header-brand{font-weight:700;font-size:1rem;letter-spacing:-0.01em;color:var(--accent)}
+  .header-by{font-size:0.7rem;color:var(--ink3);font-weight:500}
+  .header-by span{color:var(--accent);font-weight:600}
+  .theme-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;transition:all var(--tr)}
+  .theme-btn:hover{border-color:var(--accent)}
+  .kpi-bar{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0.75rem;padding:1rem 1.5rem}
+  .kpi-card{background:var(--surface);border-radius:var(--radius);padding:0.8rem 1rem;box-shadow:var(--shadow-sm);cursor:default;transition:box-shadow var(--tr)}
+  .kpi-card:hover{box-shadow:var(--shadow)}
+  .kpi-label{font-size:0.65rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--ink3);font-weight:600;margin-bottom:0.25rem}
+  .kpi-value{font-size:1.4rem;font-weight:700;letter-spacing:-0.02em}
+  .kpi-sub{font-size:0.68rem;color:var(--ink3);margin-top:0.1rem}
+  .g{color:var(--green)}.y{color:var(--yellow)}.r{color:var(--red)}.a{color:var(--accent)}
+  .main{padding:0 1.5rem 3rem}
+  .tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:1.25rem;overflow-x:auto}
+  .tab-btn{padding:0.6rem 1rem;border:none;background:none;font-size:0.8rem;font-weight:600;color:var(--ink3);cursor:pointer;position:relative;white-space:nowrap;transition:color var(--tr)}
+  .tab-btn::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--accent);transform:scaleX(0);transition:transform var(--tr)}
+  .tab-btn.active{color:var(--accent)}.tab-btn.active::after{transform:scaleX(1)}
+  .tab-btn:hover{color:var(--ink)}
+  .tab-panel{display:none}.tab-panel.active{display:block}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  .grid3{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+  @media(max-width:900px){.grid,.grid3{grid-template-columns:1fr}}
+  .card{background:var(--surface);border-radius:var(--radius);padding:1.25rem;box-shadow:var(--shadow-sm)}
+  .card-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--ink3);font-weight:700;margin-bottom:0.9rem}
+  .fg{margin-bottom:0.7rem}
+  .fl{display:block;font-size:0.7rem;font-weight:600;color:var(--ink2);margin-bottom:0.25rem;letter-spacing:0.01em}
+  .fr{display:flex;gap:0.4rem;align-items:center}
+  .fi{flex:1;padding:0.45rem 0.6rem;border:1.5px solid var(--border);border-radius:6px;font-size:0.8rem;font-family:var(--mono);color:var(--ink);background:var(--surface);outline:none;transition:border-color var(--tr),box-shadow var(--tr)}
+  .fi:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-l)}
+  .fi::placeholder{color:oklch(70% 0.01 250)}
+  .fu{font-size:0.7rem;color:var(--ink3);font-weight:500;min-width:2rem;text-align:right}
+  .btn{padding:0.45rem 1rem;border-radius:6px;font-size:0.75rem;font-weight:600;cursor:pointer;border:none;letter-spacing:0.01em;transition:all var(--tr)}
+  .btn-p{background:var(--accent);color:#fff}.btn-p:hover{opacity:0.9}.btn-p:active{transform:scale(0.97)}
+  .btn-g{background:var(--surface2);color:var(--ink2)}.btn-g:hover{background:var(--border)}
+  .btn-d{background:var(--red-bg);color:var(--red)}.btn-d:hover{background:var(--red);color:#fff}
+  .btn-s{padding:0.25rem 0.55rem;font-size:0.68rem}
+  .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.4rem 1rem;margin-top:0.8rem;padding-top:0.8rem;border-top:1px solid var(--border)}
+  .ri{display:flex;justify-content:space-between;align-items:baseline;font-size:0.72rem}
+  .rl{color:var(--ink3)}.rv{font-weight:600;font-family:var(--mono);font-size:0.78rem}
+  .bn{font-size:2.4rem;font-weight:700;letter-spacing:-0.03em;line-height:1;margin:0.4rem 0 0.2rem}
+  .score-ring{width:90px;height:90px;margin:0 auto 0.5rem;position:relative}
+  .score-ring svg{transform:rotate(-90deg)}
+  .score-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700}
+  .assess-row{display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0;font-size:0.7rem}
+  .assess-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .assess-dot.good{background:var(--green)}.assess-dot.warn{background:var(--yellow)}.assess-dot.bad{background:var(--red)}
+  .assess-row input[type=range]{width:60px;margin-left:auto}
+  .comp-table{width:100%;border-collapse:collapse;font-size:0.72rem}
+  .comp-table th{text-align:left;font-size:0.65rem;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink3);font-weight:700;padding:0.5rem 0.4rem;border-bottom:2px solid var(--border)}
+  .comp-table td{padding:0.45rem 0.4rem;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:0.72rem}
+  .comp-table tr:hover td{background:var(--surface2)}
+  .empty-state{text-align:center;padding:2.5rem 1rem;color:var(--ink3)}
+  .empty-icon{font-size:2rem;margin-bottom:0.4rem;opacity:0.35}
+  .empty-title{font-size:0.85rem;font-weight:600;margin-bottom:0.2rem}
+  .empty-desc{font-size:0.7rem}
+  .history-item{display:flex;justify-content:space-between;align-items:center;padding:0.55rem 0.7rem;border-bottom:1px solid var(--border);transition:background var(--tr)}
+  .history-item:hover{background:var(--surface2)}
+  .hn{font-weight:600;font-size:0.78rem}.hm{font-size:0.68rem;color:var(--ink3)}
+  canvas.radar{display:block;margin:0 auto;max-width:100%}
+  .toolbar{display:flex;gap:0.4rem;margin-bottom:0.75rem;flex-wrap:wrap}
+  input[type=range]{accent-color:var(--accent)}
+  select.fi{font-family:var(--font);cursor:pointer}
+  @media(max-width:640px){
+    .header{padding:0 0.8rem}.kpi-bar{padding:0.7rem;grid-template-columns:1fr 1fr;gap:0.4rem}
+    .main{padding:0 0.8rem 2rem}.grid,.grid3{grid-template-columns:1fr}
+    .kpi-value{font-size:1.1rem}.bn{font-size:1.8rem}.result-grid{grid-template-columns:1fr}
+    .tabs{gap:0}.tab-btn{padding:0.5rem 0.6rem;font-size:0.7rem}
   }
-  .header-brand { font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; color: var(--accent); }
-  .header-by { font-size: 0.75rem; color: var(--ink-muted); font-weight: 500; }
-  .header-by span { color: var(--accent); font-weight: 600; }
-
-  /* ─── KPI Bar ─── */
-  .kpi-bar {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
-    padding: 1.25rem 2rem;
-  }
-  .kpi-card {
-    background: var(--surface);
-    border-radius: var(--radius-md);
-    padding: 1rem 1.25rem;
-    box-shadow: var(--shadow-sm);
-    transition: box-shadow var(--transition);
-    cursor: default;
-  }
-  .kpi-card:hover { box-shadow: var(--shadow-md); }
-  .kpi-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-muted); font-weight: 600; margin-bottom: 0.35rem; }
-  .kpi-value { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.02em; }
-  .kpi-sub { font-size: 0.72rem; color: var(--ink-muted); margin-top: 0.15rem; }
-  .kpi-value.green { color: var(--green); }
-  .kpi-value.yellow { color: var(--yellow); }
-  .kpi-value.red { color: var(--red); }
-  .kpi-value.accent { color: var(--accent); }
-
-  /* ─── Main Content ─── */
-  .main { padding: 0 2rem 3rem; }
-
-  .tabs {
-    display: flex;
-    gap: 0;
-    border-bottom: 2px solid var(--border);
-    margin-bottom: 1.5rem;
-  }
-  .tab-btn {
-    padding: 0.65rem 1.4rem;
-    border: none;
-    background: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: var(--ink-muted);
-    cursor: pointer;
-    transition: color var(--transition);
-    position: relative;
-  }
-  .tab-btn::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transition: transform var(--transition);
-  }
-  .tab-btn.active { color: var(--accent); }
-  .tab-btn.active::after { transform: scaleX(1); }
-  .tab-btn:hover { color: var(--ink); }
-
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  /* ─── Panel Layout ─── */
-  .panel-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.25rem;
-  }
-  @media (max-width: 900px) { .panel-grid { grid-template-columns: 1fr; } }
-
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius-lg);
-    padding: 1.5rem;
-    box-shadow: var(--shadow-sm);
-  }
-  .card-title {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--ink-muted);
-    font-weight: 700;
-    margin-bottom: 1rem;
-  }
-
-  /* ─── Form Elements ─── */
-  .form-group { margin-bottom: 0.9rem; }
-  .form-label {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--ink-light);
-    margin-bottom: 0.3rem;
-    letter-spacing: 0.01em;
-  }
-  .form-row { display: flex; gap: 0.6rem; align-items: center; }
-  .form-input {
-    flex: 1;
-    padding: 0.5rem 0.7rem;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    font-family: var(--font-mono);
-    color: var(--ink);
-    background: var(--surface);
-    transition: border-color var(--transition), box-shadow var(--transition);
-    outline: none;
-  }
-  .form-input:focus {
-    border-color: var(--accent-mid);
-    box-shadow: 0 0 0 3px var(--accent-light);
-  }
-  .form-input::placeholder { color: oklch(70% 0.01 250); }
-  .form-unit {
-    font-size: 0.75rem;
-    color: var(--ink-muted);
-    font-weight: 500;
-    min-width: 2.2rem;
-    text-align: right;
-  }
-  .form-select {
-    padding: 0.5rem 0.7rem;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 0.85rem;
-    background: var(--surface);
-    color: var(--ink);
-    cursor: pointer;
-    outline: none;
-  }
-  .form-select:focus { border-color: var(--accent-mid); box-shadow: 0 0 0 3px var(--accent-light); }
-
-  /* ─── Buttons ─── */
-  .btn {
-    padding: 0.5rem 1.2rem;
-    border-radius: var(--radius-sm);
-    font-size: 0.8rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition);
-    border: none;
-    letter-spacing: 0.01em;
-  }
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { background: oklch(32% 0.13 252); }
-  .btn-primary:active { transform: scale(0.97); }
-  .btn-ghost {
-    background: var(--surface-alt);
-    color: var(--ink-light);
-  }
-  .btn-ghost:hover { background: var(--border); }
-  .btn-danger { background: var(--red-bg); color: var(--red); }
-  .btn-danger:hover { background: var(--red); color: white; }
-  .btn-sm { padding: 0.3rem 0.7rem; font-size: 0.72rem; }
-
-  /* ─── Result Breakdown ─── */
-  .result-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem 1.5rem;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-  }
-  .result-item { display: flex; justify-content: space-between; align-items: baseline; }
-  .result-label { font-size: 0.73rem; color: var(--ink-muted); }
-  .result-val { font-size: 0.85rem; font-weight: 600; font-family: var(--font-mono); }
-  .result-val.neg { color: var(--red); }
-  .result-val.pos { color: var(--green); }
-
-  .big-number {
-    font-size: 2.8rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    margin: 0.5rem 0 0.3rem;
-  }
-  .big-number.green { color: var(--green); }
-  .big-number.red { color: var(--red); }
-  .big-number.accent { color: var(--accent); }
-
-  /* ─── Score Meter ─── */
-  .score-ring {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 0.5rem;
-    position: relative;
-  }
-  .score-ring svg { transform: rotate(-90deg); }
-  .score-value {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2rem;
-    font-weight: 700;
-  }
-  .score-label { text-align: center; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.02em; }
-
-  /* ─── Assessment Dots ─── */
-  .assess-list { display: flex; flex-direction: column; gap: 0.5rem; }
-  .assess-row { display: flex; align-items: center; gap: 0.6rem; }
-  .assess-dot {
-    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
-    transition: background var(--transition);
-  }
-  .assess-dot.good { background: var(--green); }
-  .assess-dot.warn { background: var(--yellow); }
-  .assess-dot.bad { background: var(--red); }
-  .assess-dot.neutral { background: var(--border); }
-  .assess-label { font-size: 0.75rem; color: var(--ink-light); flex: 1; }
-  .assess-val { font-size: 0.75rem; font-weight: 600; font-family: var(--font-mono); color: var(--ink); }
-
-  /* ─── Competitor Table ─── */
-  .comp-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.78rem;
-  }
-  .comp-table th {
-    text-align: left;
-    font-size: 0.68rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: var(--ink-muted);
-    font-weight: 700;
-    padding: 0.6rem 0.5rem;
-    border-bottom: 2px solid var(--border);
-  }
-  .comp-table td {
-    padding: 0.55rem 0.5rem;
-    border-bottom: 1px solid var(--border);
-    font-family: var(--font-mono);
-    font-size: 0.76rem;
-  }
-  .comp-table tr:hover td { background: var(--surface-alt); }
-  .comp-table .rank-high { color: var(--green); font-weight: 700; }
-
-  /* ─── History ─── */
-  .history-list { max-height: 400px; overflow-y: auto; }
-  .history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.65rem 0.8rem;
-    border-bottom: 1px solid var(--border);
-    transition: background var(--transition);
-  }
-  .history-item:hover { background: var(--surface-alt); }
-  .history-name { font-weight: 600; font-size: 0.82rem; }
-  .history-meta { font-size: 0.7rem; color: var(--ink-muted); }
-  .history-profit { font-family: var(--font-mono); font-weight: 700; font-size: 0.82rem; }
-
-  /* ─── Empty State ─── */
-  .empty-state {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: var(--ink-muted);
-  }
-  .empty-icon { font-size: 2.5rem; margin-bottom: 0.5rem; opacity: 0.4; }
-  .empty-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.25rem; }
-  .empty-desc { font-size: 0.75rem; }
-
-  /* ─── Responsive ─── */
-  @media (max-width: 640px) {
-    .header { padding: 0 1rem; }
-    .kpi-bar { padding: 1rem; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-    .main { padding: 0 1rem 2rem; }
-    .panel-grid { grid-template-columns: 1fr; }
-    .kpi-value { font-size: 1.3rem; }
-    .big-number { font-size: 2rem; }
-    .result-grid { grid-template-columns: 1fr; }
-    .comp-table { font-size: 0.7rem; }
-    .comp-table th, .comp-table td { padding: 0.4rem 0.3rem; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { transition: none !important; animation: none !important; }
-  }
-
-  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
 </style>
 </head>
 <body>
 
 <header class="header">
-  <div class="header-brand">FBA Command Center</div>
-  <div class="header-by">by <span>Jimmy Chen</span></div>
+  <div class="header-l">
+    <span class="header-brand">FBA Command Center</span>
+    <span class="header-by">by <span>Jimmy Chen</span></span>
+  </div>
+  <button class="theme-btn" onclick="toggleTheme()" title="切换暗色模式" id="theme-btn">🌙</button>
 </header>
 
-<!-- KPI Bar -->
 <div class="kpi-bar" id="kpi-bar">
-  <div class="kpi-card">
-    <div class="kpi-label">毛利率</div>
-    <div class="kpi-value accent" id="kpi-gross-margin">--</div>
-    <div class="kpi-sub">售价 - 平台成本</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">真实净利率</div>
-    <div class="kpi-value" id="kpi-net-margin">--</div>
-    <div class="kpi-sub">扣除全成本后</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">盈亏平衡 ACOS</div>
-    <div class="kpi-value accent" id="kpi-breakeven-acos">--</div>
-    <div class="kpi-sub">广告花到这停下来</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">单品净利润</div>
-    <div class="kpi-value" id="kpi-net-profit">--</div>
-    <div class="kpi-sub">每卖一件到手</div>
-  </div>
-  <div class="kpi-card">
-    <div class="kpi-label">月利润预估</div>
-    <div class="kpi-value accent" id="kpi-monthly-profit">--</div>
-    <div class="kpi-sub">月销 × 净利</div>
-  </div>
+  <div class="kpi-card"><div class="kpi-label">毛利率</div><div class="kpi-value a" id="kpi-gm">--</div><div class="kpi-sub">售价-平台成本</div></div>
+  <div class="kpi-card"><div class="kpi-label">净利率</div><div class="kpi-value" id="kpi-nm">--</div><div class="kpi-sub">扣除全成本</div></div>
+  <div class="kpi-card"><div class="kpi-label">盈亏平衡 ACOS</div><div class="kpi-value a" id="kpi-ba">--</div><div class="kpi-sub">广告烧钱上限</div></div>
+  <div class="kpi-card"><div class="kpi-label">单品净利</div><div class="kpi-value" id="kpi-np">--</div><div class="kpi-sub">每卖一件到手</div></div>
+  <div class="kpi-card"><div class="kpi-label">月利润</div><div class="kpi-value a" id="kpi-mp">--</div><div class="kpi-sub">月销×净利</div></div>
 </div>
 
-<!-- Main -->
 <main class="main">
-  <nav class="tabs" role="tablist">
-    <button class="tab-btn active" data-tab="profit" role="tab" aria-selected="true">利润计算器</button>
-    <button class="tab-btn" data-tab="assess" role="tab" aria-selected="false">选品评估</button>
-    <button class="tab-btn" data-tab="compete" role="tab" aria-selected="false">竞品对比</button>
-    <button class="tab-btn" data-tab="history" role="tab" aria-selected="false">记录</button>
-  </nav>
+<nav class="tabs" role="tablist" id="tab-nav"></nav>
 
-  <!-- ─── Tab 1: Profit Calculator ─── -->
-  <section class="tab-panel active" id="panel-profit">
-    <div class="panel-grid">
-      <div class="card">
-        <div class="card-title">产品参数</div>
-        <div class="form-group">
-          <label class="form-label">售价 (USD)</label>
-          <input type="number" class="form-input" id="in-price" placeholder="12.98" step="0.01" min="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">采购成本 (RMB)</label>
-          <input type="number" class="form-input" id="in-cost-rmb" placeholder="15.00" step="0.01" min="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">头程运费 (RMB/件)</label>
-          <input type="number" class="form-input" id="in-freight-rmb" placeholder="3.00" step="0.01" min="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">FBA 配送费 (USD)</label>
-          <input type="number" class="form-input" id="in-fba" placeholder="5.33" step="0.01" min="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">佣金率</label>
-          <div class="form-row">
-            <select class="form-select" id="in-commission-rate" style="flex:1">
-              <option value="15">15% (多数类目)</option>
-              <option value="12">12%</option>
-              <option value="8">8%</option>
-              <option value="17">17%</option>
-              <option value="20">20%</option>
-              <option value="45">45% (亚马逊设备配件)</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">广告 ACOS (%)</label>
-          <input type="number" class="form-input" id="in-acos" placeholder="25" step="0.1" min="0" max="100">
-        </div>
-        <div class="form-group">
-          <label class="form-label">退货率 (%)</label>
-          <input type="number" class="form-input" id="in-return-rate" placeholder="5" step="0.1" min="0" max="100">
-        </div>
-        <div class="form-group">
-          <label class="form-label">汇率 (RMB/USD)</label>
-          <input type="number" class="form-input" id="in-exchange" value="7.25" step="0.01" min="0">
-        </div>
-        <div class="form-group">
-          <label class="form-label">预估月销量</label>
-          <input type="number" class="form-input" id="in-monthly-sales" placeholder="300" step="1" min="0">
-        </div>
-        <div style="display:flex;gap:0.5rem;margin-top:1rem">
-          <button class="btn btn-primary" onclick="calcProfit()">计算利润</button>
-          <button class="btn btn-ghost" onclick="saveProduct()">保存到记录</button>
-        </div>
-      </div>
-      <div class="card" id="result-card">
-        <div class="card-title">利润分解</div>
-        <div class="empty-state" id="result-empty">
-          <div class="empty-icon">&#9633;</div>
-          <div class="empty-title">填入参数后点击计算</div>
-          <div class="empty-desc">支持 RMB/USD 混合输入，汇率实时可调</div>
-        </div>
-        <div id="result-content" style="display:none">
-          <div class="big-number" id="res-net-profit">$0.00</div>
-          <div style="font-size:0.78rem;color:var(--ink-muted)">每件净利润</div>
-          <div class="result-grid">
-            <div class="result-item"><span class="result-label">售价</span><span class="result-val" id="res-price">-</span></div>
-            <div class="result-item"><span class="result-label">佣金</span><span class="result-val neg" id="res-commission">-</span></div>
-            <div class="result-item"><span class="result-label">FBA 费</span><span class="result-val neg" id="res-fba">-</span></div>
-            <div class="result-item"><span class="result-label">采购成本</span><span class="result-val neg" id="res-cost">-</span></div>
-            <div class="result-item"><span class="result-label">头程运费</span><span class="result-val neg" id="res-freight">-</span></div>
-            <div class="result-item"><span class="result-label">广告费</span><span class="result-val neg" id="res-ads">-</span></div>
-            <div class="result-item"><span class="result-label">退货损耗</span><span class="result-val neg" id="res-returns">-</span></div>
-            <div class="result-item" style="border-top:1px solid var(--border);padding-top:0.4rem;margin-top:0.2rem"><span class="result-label" style="font-weight:700">毛利率</span><span class="result-val" id="res-gross-margin">-</span></div>
-            <div class="result-item" style="border-top:1px solid var(--border);padding-top:0.4rem;margin-top:0.2rem"><span class="result-label" style="font-weight:700">净利率</span><span class="result-val" id="res-net-margin">-</span></div>
-            <div class="result-item"><span class="result-label">盈亏平衡 ACOS</span><span class="result-val" id="res-be-acos">-</span></div>
-            <div class="result-item"><span class="result-label">月利润</span><span class="result-val" id="res-monthly">-</span></div>
-          </div>
-        </div>
+<!-- Tab 1: Profit -->
+<section class="tab-panel active" id="panel-profit">
+<div class="grid">
+  <div class="card">
+    <div class="card-title">产品参数</div>
+    <div class="fg"><label class="fl">产品名称</label><input class="fi" id="p-name" placeholder="手持风扇-黑色" style="font-family:var(--font)"></div>
+    <div class="fg"><label class="fl">售价 (USD)</label><input class="fi" id="p-price" type="number" placeholder="12.98" step="0.01"></div>
+    <div class="fg"><label class="fl">采购成本 (RMB)</label><input class="fi" id="p-cost" type="number" placeholder="15.00" step="0.01"></div>
+    <div class="fg"><label class="fl">头程运费 (RMB/件)</label><input class="fi" id="p-freight" type="number" placeholder="3.00" step="0.01"></div>
+    <div class="fg"><label class="fl">FBA 尺寸分段</label>
+      <select class="fi" id="p-fba-tier" onchange="autoFba()">
+        <option value="small">小标准件 ≤15×12×0.75" ≤0.75lb</option>
+        <option value="large">大标准件 ≤18×14×8" ≤20lb</option>
+        <option value="sml-oversize">小超大件 ≤60×30×130" ≤70lb</option>
+        <option value="custom">自定义 FBA 费</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">FBA 配送费 (USD) <span style="font-weight:400;color:var(--ink3)">— 自动填充或手动</span></label><input class="fi" id="p-fba" type="number" placeholder="5.33" step="0.01"></div>
+    <div class="fg"><label class="fl">佣金率</label>
+      <select class="fi" id="p-comm">
+        <option value="15">15% (多数类目)</option><option value="12">12%</option><option value="8">8%</option>
+        <option value="17">17%</option><option value="20">20%</option><option value="45">45% (亚马逊设备配件)</option>
+      </select>
+    </div>
+    <div class="fg"><label class="fl">广告 ACOS (%)</label><input class="fi" id="p-acos" type="number" placeholder="25" step="0.1"></div>
+    <div class="fg"><label class="fl">退货率 (%)</label><input class="fi" id="p-ret" type="number" placeholder="5" step="0.1"></div>
+    <div class="fg"><label class="fl">汇率 (RMB/USD)</label><input class="fi" id="p-fx" type="number" value="7.25" step="0.01"></div>
+    <div class="fg"><label class="fl">预估月销量</label><input class="fi" id="p-mo" type="number" placeholder="300" step="1"></div>
+    <div style="display:flex;gap:0.4rem;margin-top:0.8rem">
+      <button class="btn btn-p" onclick="calcProfit()">计算利润</button>
+      <button class="btn btn-g" onclick="saveProduct()">保存</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">多产品对比</div>
+    <div id="multi-compare">
+      <div class="empty-state"><div class="empty-icon">📊</div><div class="empty-title">保存多个产品后可对比</div><div class="empty-desc">在左侧保存产品后自动出现</div></div>
+      <div id="compare-table" style="display:none;overflow-x:auto">
+        <table class="comp-table"><thead><tr><th>产品</th><th>售价</th><th>净利</th><th>净利率</th><th>毛利率</th><th>BE ACOS</th><th>月利润</th></tr></thead><tbody id="compare-tbody"></tbody></table>
       </div>
     </div>
-  </section>
+    <div class="card-title" style="margin-top:1rem">利润分解</div>
+    <div id="result-empty2" class="empty-state"><div class="empty-icon">⊡</div><div class="empty-title">填入参数计算</div></div>
+    <div id="result-content" style="display:none">
+      <div class="bn" id="res-np">$0.00</div><div style="font-size:0.72rem;color:var(--ink3)">每件净利润</div>
+      <div class="result-grid">
+        <div class="ri"><span class="rl">售价</span><span class="rv" id="res-price">-</span></div>
+        <div class="ri"><span class="rl">佣金</span><span class="rv r" id="res-comm">-</span></div>
+        <div class="ri"><span class="rl">FBA费</span><span class="rv r" id="res-fba">-</span></div>
+        <div class="ri"><span class="rl">采购成本</span><span class="rv r" id="res-cost">-</span></div>
+        <div class="ri"><span class="rl">头程运费</span><span class="rv r" id="res-freight">-</span></div>
+        <div class="ri"><span class="rl">广告费</span><span class="rv r" id="res-ads">-</span></div>
+        <div class="ri"><span class="rl">退货损耗</span><span class="rv r" id="res-ret">-</span></div>
+        <div class="ri" style="border-top:1px solid var(--border);padding-top:0.3rem;margin-top:0.1rem"><span class="rl" style="font-weight:700">毛利率</span><span class="rv" id="res-gm">-</span></div>
+        <div class="ri" style="border-top:1px solid var(--border);padding-top:0.3rem;margin-top:0.1rem"><span class="rl" style="font-weight:700">净利率</span><span class="rv" id="res-nm">-</span></div>
+        <div class="ri"><span class="rl">盈亏平衡ACOS</span><span class="rv" id="res-ba">-</span></div>
+        <div class="ri"><span class="rl">月利润</span><span class="rv" id="res-mo">-</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
 
-  <!-- ─── Tab 2: Product Assessment ─── -->
-  <section class="tab-panel" id="panel-assess">
-    <div class="panel-grid">
-      <div class="card">
-        <div class="card-title">选品评估维度</div>
-        <div class="form-group">
-          <label class="form-label">BSR 排名（主类目）</label>
-          <select class="form-select" id="as-bsr">
-            <option value="3">Top 100（竞争激烈）</option>
-            <option value="9" selected>100-2,000（安全区间）</option>
-            <option value="6">2,000-10,000</option>
-            <option value="3">> 10,000（量太小）</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">竞品平均评论数</label>
-          <select class="form-select" id="as-reviews">
-            <option value="9" selected>< 500（低壁垒）</option>
-            <option value="6">500-1,500</option>
-            <option value="3">1,500-5,000</option>
-            <option value="1">> 5,000（高壁垒）</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">竞品平均评分</label>
-          <select class="form-select" id="as-rating">
-            <option value="10" selected>3.5-4.3（有改进空间）</option>
-            <option value="6">4.3-4.5</option>
-            <option value="2">> 4.5（难差异化）</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">价格带</label>
-          <select class="form-select" id="as-price-band">
-            <option value="9" selected>$25-$45</option>
-            <option value="6">$15-$25</option>
-            <option value="4">$45-$80</option>
-            <option value="2">< $15 或 > $80</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">品牌集中度</label>
-          <select class="form-select" id="as-brand-conc">
-            <option value="9" selected>分散（Top 3 < 40%）</option>
-            <option value="5">中等（Top 3 40%-60%）</option>
-            <option value="2">集中（Top 3 > 60%）</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">核心词月搜索量</label>
-          <select class="form-select" id="as-search-vol">
-            <option value="8" selected>5,000-50,000</option>
-            <option value="10">> 50,000（大市场）</option>
-            <option value="4">1,000-5,000</option>
-            <option value="1">< 1,000</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">是否季节性</label>
-          <select class="form-select" id="as-seasonal">
-            <option value="10" selected>非季节性（全年稳定）</option>
-            <option value="5">弱季节性</option>
-            <option value="2">强季节性（如圣诞装饰）</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">产品重量</label>
-          <select class="form-select" id="as-weight">
-            <option value="9" selected>< 500g（轻小件）</option>
-            <option value="6">500g-2kg</option>
-            <option value="3">> 2kg</option>
-          </select>
-        </div>
-        <button class="btn btn-primary" onclick="runAssessment()" style="margin-top:0.5rem">评估</button>
-      </div>
-      <div class="card" style="text-align:center">
-        <div class="card-title">评估结果</div>
-        <div class="empty-state" id="assess-empty">
-          <div class="empty-icon">&#9733;</div>
-          <div class="empty-title">选择各维度后点击评估</div>
-          <div class="empty-desc">综合得分 1-10，绿色可进 / 黄色谨慎 / 红色避开</div>
-        </div>
-        <div id="assess-result" style="display:none">
-          <div class="score-ring" id="score-ring-container">
-            <svg width="100" height="100" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border)" stroke-width="8"/>
-              <circle id="score-arc" cx="50" cy="50" r="42" fill="none" stroke-width="8" stroke-linecap="round"/>
-            </svg>
-            <div class="score-value" id="score-number">0</div>
-          </div>
-          <div class="score-label" id="score-verdict">--</div>
-          <div class="assess-list" id="assess-details" style="margin-top:1rem;text-align:left"></div>
-        </div>
-      </div>
+<!-- Tab 2: Assessment -->
+<section class="tab-panel" id="panel-assess">
+<div class="grid">
+  <div class="card"><div class="card-title">维度评分（拖滑块设权重）</div>
+    <div id="assess-dims"></div>
+    <button class="btn btn-p" onclick="runAssessment()" style="margin-top:0.5rem">评估</button>
+  </div>
+  <div class="card" style="text-align:center">
+    <div class="card-title">评估结果</div>
+    <div id="assess-empty2" class="empty-state"><div class="empty-icon">★</div><div class="empty-title">选择维度后评估</div></div>
+    <div id="assess-result" style="display:none">
+      <div class="score-ring"><svg width="90" height="90" viewBox="0 0 90 90"><circle cx="45" cy="45" r="38" fill="none" stroke="var(--border)" stroke-width="7"/><circle id="score-arc" cx="45" cy="45" r="38" fill="none" stroke-width="7" stroke-linecap="round"/></svg><div class="score-value" id="score-num">0</div></div>
+      <div class="score-label" id="score-verdict" style="font-size:0.75rem;font-weight:600;margin-top:0.3rem">--</div>
+      <div id="assess-details" style="margin-top:0.8rem;text-align:left"></div>
     </div>
-  </section>
+  </div>
+</div>
+</section>
 
-  <!-- ─── Tab 3: Competitor Comparison ─── -->
-  <section class="tab-panel" id="panel-compete">
-    <div class="card" style="margin-bottom:1rem">
-      <div class="card-title">添加竞品</div>
-      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:flex-end">
-        <div class="form-group" style="flex:1;min-width:100px"><label class="form-label">ASIN</label><input class="form-input" id="comp-asin" placeholder="B0XXXXXXX"></div>
-        <div class="form-group" style="flex:1;min-width:80px"><label class="form-label">售价</label><input class="form-input" id="comp-price" placeholder="19.99" type="number" step="0.01"></div>
-        <div class="form-group" style="flex:1;min-width:80px"><label class="form-label">BSR</label><input class="form-input" id="comp-bsr" placeholder="1500" type="number"></div>
-        <div class="form-group" style="flex:1;min-width:80px"><label class="form-label">评论数</label><input class="form-input" id="comp-reviews" placeholder="320" type="number"></div>
-        <div class="form-group" style="flex:1;min-width:80px"><label class="form-label">评分</label><input class="form-input" id="comp-rating" placeholder="4.3" type="number" step="0.1" min="1" max="5"></div>
-        <div class="form-group" style="flex:1;min-width:80px"><label class="form-label">上架天数</label><input class="form-input" id="comp-age" placeholder="180" type="number"></div>
-        <div class="form-group" style="flex:1;min-width:80px"><label class="form-label">月销(估)</label><input class="form-input" id="comp-sales" placeholder="450" type="number"></div>
-        <button class="btn btn-primary" onclick="addCompetitor()" style="margin-bottom:0.9rem">+ 添加</button>
-      </div>
+<!-- Tab 3: Competitors -->
+<section class="tab-panel" id="panel-compete">
+<div class="card" style="margin-bottom:1rem">
+  <div class="card-title">添加竞品</div>
+  <div style="display:flex;gap:0.4rem;flex-wrap:wrap;align-items:flex-end" id="comp-form">
+    <div class="fg" style="flex:1;min-width:80px"><label class="fl">ASIN</label><input class="fi" id="c-asin" placeholder="B0XXX"></div>
+    <div class="fg" style="flex:1;min-width:70px"><label class="fl">售价$</label><input class="fi" id="c-price" type="number" placeholder="19.99" step="0.01"></div>
+    <div class="fg" style="flex:1;min-width:70px"><label class="fl">BSR</label><input class="fi" id="c-bsr" type="number" placeholder="1500"></div>
+    <div class="fg" style="flex:1;min-width:70px"><label class="fl">评论</label><input class="fi" id="c-rev" type="number" placeholder="320"></div>
+    <div class="fg" style="flex:1;min-width:70px"><label class="fl">评分</label><input class="fi" id="c-rating" type="number" placeholder="4.3" step="0.1" min="1" max="5"></div>
+    <div class="fg" style="flex:1;min-width:70px"><label class="fl">上架天</label><input class="fi" id="c-age" type="number" placeholder="180"></div>
+    <div class="fg" style="flex:1;min-width:70px"><label class="fl">月销</label><input class="fi" id="c-sales" type="number" placeholder="450"></div>
+    <button class="btn btn-p" onclick="addCompetitor()" style="margin-bottom:0.7rem">+</button>
+  </div>
+</div>
+<div class="grid">
+  <div class="card"><div class="card-title">竞品对比表</div>
+    <div id="comp-empty2" class="empty-state"><div class="empty-icon">⇄</div><div class="empty-title">暂无竞品</div></div>
+    <div id="comp-table-wrap" style="display:none;overflow-x:auto">
+      <table class="comp-table"><thead><tr><th>ASIN</th><th>售价</th><th>BSR</th><th>评论</th><th>评分</th><th>上架</th><th>月销</th><th>日销</th><th>×</th></tr></thead><tbody id="comp-tbody"></tbody></table>
     </div>
-    <div class="card">
-      <div class="card-title">竞品对比表</div>
-      <div id="comp-empty" class="empty-state">
-        <div class="empty-icon">&#8644;</div>
-        <div class="empty-title">还没有添加竞品</div>
-        <div class="empty-desc">在上方输入竞品数据，添加后自动对比</div>
-      </div>
-      <div style="overflow-x:auto" id="comp-table-wrap" hidden>
-        <table class="comp-table" id="comp-table">
-          <thead><tr><th>ASIN</th><th>售价</th><th>BSR</th><th>评论数</th><th>评分</th><th>上架天数</th><th>月销 (估)</th><th>日销</th><th>操作</th></tr></thead>
-          <tbody id="comp-tbody"></tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+  </div>
+  <div class="card" style="text-align:center">
+    <div class="card-title">六维雷达图</div>
+    <canvas id="radar-canvas" class="radar" width="360" height="360"></canvas>
+    <div class="empty-state" id="radar-empty"><div class="empty-icon">◉</div><div class="empty-title">添加 ≥2 个竞品后显示</div></div>
+  </div>
+</div>
+</section>
 
-  <!-- ─── Tab 4: History ─── -->
-  <section class="tab-panel" id="panel-history">
-    <div class="card">
-      <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
-        保存的产品记录
-        <button class="btn btn-danger btn-sm" onclick="clearHistory()">清空全部</button>
-      </div>
-      <div class="history-list" id="history-list">
-        <div class="empty-state">
-          <div class="empty-icon">&#128466;</div>
-          <div class="empty-title">暂无记录</div>
-          <div class="empty-desc">在利润计算器中点击「保存到记录」</div>
-        </div>
+<!-- Tab 4: Ads Simulator -->
+<section class="tab-panel" id="panel-ads">
+<div class="grid">
+  <div class="card">
+    <div class="card-title">广告模拟器</div>
+    <div class="fg"><label class="fl">售价 (USD)</label><input class="fi" id="as-price" type="number" placeholder="12.98" step="0.01" oninput="simAds()"></div>
+    <div class="fg"><label class="fl">单品净利润（不含广告）(USD)</label><input class="fi" id="as-net-no-ad" type="number" placeholder="2.50" step="0.01" oninput="simAds()"></div>
+    <div class="fg"><label class="fl">平均 CPC 出价 ($)</label><input class="fi" id="as-cpc" type="number" placeholder="0.80" step="0.01" oninput="simAds()"></div>
+    <div class="fg"><label class="fl">转化率 (%)</label><input class="fi" id="as-cvr" type="number" placeholder="8" step="0.1" oninput="simAds()"></div>
+    <div class="fg"><label class="fl">目标 ACOS (%)</label><input class="fi" id="as-target-acos" type="number" placeholder="20" step="0.1" oninput="simAds()"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">模拟结果</div>
+    <div id="ads-result" class="empty-state"><div class="empty-icon">📈</div><div class="empty-title">填入参数自动计算</div></div>
+    <div id="ads-content" style="display:none">
+      <div class="result-grid">
+        <div class="ri"><span class="rl">点击→成交所需点击</span><span class="rv" id="ars-clicks">-</span></div>
+        <div class="ri"><span class="rl">每单广告成本</span><span class="rv r" id="ars-cost-per-order">-</span></div>
+        <div class="ri"><span class="rl">广告后净利润</span><span class="rv" id="ars-net">-</span></div>
+        <div class="ri"><span class="rl">实际 ACOS</span><span class="rv" id="ars-acos">-</span></div>
+        <div class="ri"><span class="rl">建议最高 CPC</span><span class="rv g" id="ars-max-cpc">-</span></div>
+        <div class="ri"><span class="rl">建议日预算 (20点击)</span><span class="rv" id="ars-daily">-</span></div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
+</section>
+
+<!-- Tab 5: Reverse Calc -->
+<section class="tab-panel" id="panel-reverse">
+<div class="grid">
+  <div class="card">
+    <div class="card-title">盈亏倒推</div>
+    <div class="fg"><label class="fl">采购成本 (RMB)</label><input class="fi" id="rv-cost" type="number" placeholder="15.00" step="0.01" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">头程运费 (RMB)</label><input class="fi" id="rv-freight" type="number" placeholder="3.00" step="0.01" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">FBA 费 (USD)</label><input class="fi" id="rv-fba" type="number" placeholder="5.33" step="0.01" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">佣金率 (%)</label><input class="fi" id="rv-comm" type="number" value="15" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">广告 ACOS (%)</label><input class="fi" id="rv-acos" type="number" placeholder="25" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">退货率 (%)</label><input class="fi" id="rv-ret" type="number" placeholder="5" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">汇率</label><input class="fi" id="rv-fx" type="number" value="7.25" step="0.01" oninput="reverseCalc()"></div>
+    <div class="fg"><label class="fl">目标净利率 (%)</label><input class="fi" id="rv-target" type="number" value="15" oninput="reverseCalc()"></div>
+  </div>
+  <div class="card"><div class="card-title">倒推结果</div>
+    <div id="rv-result" class="empty-state"><div class="empty-icon">⟲</div><div class="empty-title">填入参数自动计算</div></div>
+    <div id="rv-content" style="display:none">
+      <div class="result-grid">
+        <div class="ri"><span class="rl">最低售价</span><span class="rv a" style="font-size:1.1rem" id="rvs-price">-</span></div>
+        <div class="ri"><span class="rl">每件总成本</span><span class="rv r" id="rvs-cost">-</span></div>
+        <div class="ri"><span class="rl">净利润</span><span class="rv g" id="rvs-net">-</span></div>
+        <div class="ri"><span class="rl">安全售价(+10%)</span><span class="rv" id="rvs-safe">-</span></div>
+        <div class="ri"><span class="rl">如果售价$19.99 净利</span><span class="rv" id="rvs-at1999">-</span></div>
+        <div class="ri"><span class="rl">如果售价$24.99 净利</span><span class="rv" id="rvs-at2499">-</span></div>
+        <div class="ri"><span class="rl">如果售价$29.99 净利</span><span class="rv" id="rvs-at2999">-</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Tab 6: Inventory -->
+<section class="tab-panel" id="panel-inv">
+<div class="grid">
+  <div class="card">
+    <div class="card-title">库存补货计算器</div>
+    <div class="fg"><label class="fl">日均销量</label><input class="fi" id="iv-daily" type="number" placeholder="10" oninput="invCalc()"></div>
+    <div class="fg"><label class="fl">采购生产周期（天）</label><input class="fi" id="iv-prod" type="number" placeholder="15" oninput="invCalc()"></div>
+    <div class="fg"><label class="fl">海运周期（天）</label><input class="fi" id="iv-sea" type="number" placeholder="30" oninput="invCalc()"></div>
+    <div class="fg"><label class="fl">FBA 入库处理（天）</label><input class="fi" id="iv-fba-in" type="number" placeholder="5" oninput="invCalc()"></div>
+    <div class="fg"><label class="fl">安全库存天数</label><input class="fi" id="iv-safety" type="number" value="15" oninput="invCalc()"></div>
+    <div class="fg"><label class="fl">当前 FBA 库存</label><input class="fi" id="iv-current" type="number" placeholder="300" oninput="invCalc()"></div>
+  </div>
+  <div class="card"><div class="card-title">补货建议</div>
+    <div id="iv-result" class="empty-state"><div class="empty-icon">📦</div><div class="empty-title">填入参数自动计算</div></div>
+    <div id="iv-content" style="display:none">
+      <div class="result-grid">
+        <div class="ri"><span class="rl">总补货周期</span><span class="rv" id="ivs-cycle">-</span></div>
+        <div class="ri"><span class="rl">周期内销量</span><span class="rv" id="ivs-cycle-sales">-</span></div>
+        <div class="ri"><span class="rl">安全库存量</span><span class="rv a" id="ivs-safety-qty">-</span></div>
+        <div class="ri"><span class="rl">建议补货点</span><span class="rv y" id="ivs-reorder">-</span></div>
+        <div class="ri"><span class="rl">建议补货量</span><span class="rv g" id="ivs-qty">-</span></div>
+        <div class="ri"><span class="rl">当前库存可支撑</span><span class="rv" id="ivs-days-left">-</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Tab 7: History -->
+<section class="tab-panel" id="panel-history">
+<div class="card">
+  <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+    保存的产品
+    <div style="display:flex;gap:0.3rem">
+      <button class="btn btn-g btn-s" onclick="exportData()">导出</button>
+      <button class="btn btn-g btn-s" onclick="document.getElementById('import-file').click()">导入</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(event)">
+      <button class="btn btn-d btn-s" onclick="clearHistory()">清空</button>
+    </div>
+  </div>
+  <div id="history-list"><div class="empty-state"><div class="empty-icon">🗆</div><div class="empty-title">暂无记录</div></div></div>
+</div>
+</section>
+
 </main>
 
 <script>
-// ─── State ───
-function loadData(key, fallback) {
-  try { const d = localStorage.getItem('amz_' + key); return d ? JSON.parse(d) : fallback; }
-  catch (e) { return fallback; }
+// ─── Data ───
+const LS = (k, d) => { try { const v = localStorage.getItem('amz_'+k); return v ? JSON.parse(v) : d; } catch(e) { return d; } };
+const SS = (k, v) => localStorage.setItem('amz_'+k, JSON.stringify(v));
+
+let products = LS('products', []);
+let competitors = LS('competitors', []);
+let lastResult = LS('lastResult', null);
+let darkMode = LS('dark', false);
+
+// ─── Theme ───
+function toggleTheme() {
+  darkMode = !darkMode;
+  document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
+  document.getElementById('theme-btn').textContent = darkMode ? '☀️' : '🌙';
+  SS('dark', darkMode);
 }
-function saveData(key, val) { localStorage.setItem('amz_' + key, JSON.stringify(val)); }
+if (darkMode) { document.documentElement.setAttribute('data-theme', 'dark'); document.getElementById('theme-btn').textContent = '☀️'; }
 
-let products = loadData('products', []);
-let competitors = loadData('competitors', []);
-let lastResult = loadData('lastResult', null);
+// ─── FBA auto fee ───
+function autoFba() {
+  const tier = document.getElementById('p-fba-tier').value;
+  const fees = { small: '3.22', large: '5.32', 'sml-oversize': '8.66', custom: '' };
+  if (tier !== 'custom') document.getElementById('p-fba').value = fees[tier];
+  calcProfit();
+}
+document.getElementById('p-fba-tier').addEventListener('change', autoFba);
 
-// ─── Tab Switching ───
+// ─── Profit Calculator ───
+function calcProfit() {
+  const price = +document.getElementById('p-price').value || 0;
+  const costRmb = +document.getElementById('p-cost').value || 0;
+  const freightRmb = +document.getElementById('p-freight').value || 0;
+  const fba = +document.getElementById('p-fba').value || 0;
+  const commR = (+document.getElementById('p-comm').value || 15) / 100;
+  const acos = (+document.getElementById('p-acos').value || 0) / 100;
+  const retR = (+document.getElementById('p-ret').value || 0) / 100;
+  const fx = +document.getElementById('p-fx').value || 7.25;
+  const mo = +document.getElementById('p-mo').value || 0;
+
+  const comm = price * commR;
+  const costUsd = costRmb / fx;
+  const freightUsd = freightRmb / fx;
+  const ads = price * acos;
+  const returns = price * retR;
+  const totalCost = comm + fba + costUsd + freightUsd + ads + returns;
+  const net = price - totalCost;
+  const gm = (price - comm - fba) / price * 100;
+  const nm = net / price * 100;
+  const ba = (price - comm - fba - costUsd - freightUsd - returns) / price * 100;
+  const mp = net * mo;
+
+  lastResult = { name: document.getElementById('p-name').value || ('产品'+new Date().toLocaleDateString()),
+    price, costRmb, freightRmb, fba, commR, acos, retR, fx, mo,
+    comm, costUsd, freightUsd, ads, returns, net, gm, nm, ba, mp, ts: Date.now() };
+  SS('lastResult', lastResult);
+
+  document.getElementById('result-empty2').style.display = 'none';
+  document.getElementById('result-content').style.display = '';
+  const cl = v => v > 1 ? 'g' : v > 0 ? 'a' : 'r';
+  document.getElementById('res-np').textContent = '$' + net.toFixed(2);
+  document.getElementById('res-np').className = 'bn ' + cl(net);
+  document.getElementById('res-price').textContent = '$' + price.toFixed(2);
+  document.getElementById('res-comm').textContent = '-$' + comm.toFixed(2);
+  document.getElementById('res-fba').textContent = '-$' + fba.toFixed(2);
+  document.getElementById('res-cost').textContent = '-$' + costUsd.toFixed(2) + ' (¥'+costRmb.toFixed(2)+')';
+  document.getElementById('res-freight').textContent = '-$' + freightUsd.toFixed(2) + ' (¥'+freightRmb.toFixed(2)+')';
+  document.getElementById('res-ads').textContent = '-$' + ads.toFixed(2);
+  document.getElementById('res-ret').textContent = '-$' + returns.toFixed(2);
+  document.getElementById('res-gm').textContent = gm.toFixed(1) + '%';
+  document.getElementById('res-nm').textContent = nm.toFixed(1) + '%';
+  document.getElementById('res-ba').textContent = ba.toFixed(1) + '%';
+  document.getElementById('res-mo').textContent = '$' + mp.toFixed(0);
+  updateKPIs(gm, nm, ba, net, mp);
+  renderCompare();
+}
+
+function updateKPIs(gm, nm, ba, np, mp) {
+  const s = (id, v, c) => { const e = document.getElementById(id); e.textContent = v; e.className = 'kpi-value '+c; };
+  s('kpi-gm', gm.toFixed(1)+'%', 'a');
+  s('kpi-nm', nm.toFixed(1)+'%', nm>10?'g':nm>0?'y':'r');
+  s('kpi-ba', ba.toFixed(1)+'%', 'a');
+  s('kpi-np', '$'+np.toFixed(2), np>1?'g':np>0?'y':'r');
+  s('kpi-mp', '$'+mp.toFixed(0), mp>500?'g':mp>0?'a':'r');
+}
+
+function saveProduct() {
+  if (!lastResult) return alert('请先计算利润');
+  const name = prompt('产品名：', lastResult.name);
+  if (!name) return;
+  lastResult.name = name;
+  products.unshift({...lastResult});
+  if (products.length > 50) products = products.slice(0, 50);
+  SS('products', products);
+  renderHistory();
+  renderCompare();
+}
+
+function renderCompare() {
+  const c = document.getElementById('compare-tbody');
+  const wrap = document.getElementById('compare-table');
+  const empty = document.querySelector('#multi-compare .empty-state');
+  if (products.length < 2) {
+    wrap.style.display = 'none'; empty.style.display = ''; return;
+  }
+  empty.style.display = 'none'; wrap.style.display = '';
+  c.innerHTML = products.slice(0, 10).map(p => `<tr>
+    <td>${p.name}</td><td>$${p.price.toFixed(2)}</td>
+    <td class="${p.net>1?'g':p.net>0?'a':'r'}">$${p.net.toFixed(2)}</td>
+    <td>${p.nm.toFixed(1)}%</td><td>${p.gm.toFixed(1)}%</td>
+    <td>${p.ba.toFixed(1)}%</td><td>$${p.mp.toFixed(0)}</td>
+  </tr>`).join('');
+}
+
+// ─── Assessment ───
+const assessDefs = [
+  { id: 'as-bsr', label: 'BSR排名', opts: [{v:3,t:'Top 100'},{v:9,t:'100-2,000'},{v:6,t:'2,000-10,000'},{v:3,t:'>10,000'}], w:1 },
+  { id: 'as-rev', label: '评论壁垒', opts: [{v:9,t:'<500'},{v:6,t:'500-1.5K'},{v:3,t:'1.5K-5K'},{v:1,t:'>5K'}], w:1 },
+  { id: 'as-rating', label: '评分空间', opts: [{v:10,t:'3.5-4.3'},{v:6,t:'4.3-4.5'},{v:2,t:'>4.5'}], w:1 },
+  { id: 'as-price', label: '价格带', opts: [{v:9,t:'$25-45'},{v:6,t:'$15-25'},{v:4,t:'$45-80'},{v:2,t:'<15或>80'}], w:1 },
+  { id: 'as-brand', label: '品牌集中度', opts: [{v:9,t:'分散<40%'},{v:5,t:'中等40-60%'},{v:2,t:'集中>60%'}], w:1 },
+  { id: 'as-search', label: '搜索量', opts: [{v:8,t:'5K-50K'},{v:10,t:'>50K'},{v:4,t:'1K-5K'},{v:1,t:'<1K'}], w:1 },
+  { id: 'as-season', label: '季节性', opts: [{v:10,t:'非季节'},{v:5,t:'弱季节'},{v:2,t:'强季节'}], w:1 },
+  { id: 'as-weight', label: '重量', opts: [{v:9,t:'<500g'},{v:6,t:'0.5-2kg'},{v:3,t:'>2kg'}], w:1 },
+];
+
+function buildAssessUI() {
+  const container = document.getElementById('assess-dims');
+  container.innerHTML = assessDefs.map(d => {
+    const optsHtml = d.opts.map(o => `<option value="${o.v}">${o.t} (${o.v}/10)</option>`).join('');
+    return `<div class="assess-row">
+      <div class="assess-dot neutral" id="dot-${d.id}"></div>
+      <span style="flex:1;font-size:0.72rem;font-weight:500">${d.label}</span>
+      <select class="fi" id="${d.id}" style="width:130px;font-size:0.7rem;padding:0.3rem" onchange="liveAssess()">${optsHtml}</select>
+      <input type="range" min="0.5" max="2" step="0.1" value="1" id="w-${d.id}" style="width:50px" oninput="liveAssess()" title="权重">
+      <span style="width:22px;text-align:right;font-size:0.65rem;font-weight:600" id="wv-${d.id}">1.0</span>
+    </div>`;
+  }).join('');
+}
+buildAssessUI();
+
+function liveAssess() { runAssessment(); }
+
+function runAssessment() {
+  let totalW = 0, totalS = 0;
+  const details = [];
+  assessDefs.forEach(d => {
+    const score = +document.getElementById(d.id).value;
+    const w = +document.getElementById('w-'+d.id).value;
+    document.getElementById('wv-'+d.id).textContent = w.toFixed(1);
+    totalW += w; totalS += score * w;
+    const dot = document.getElementById('dot-'+d.id);
+    dot.className = 'assess-dot ' + (score>=8?'good':score>=5?'warn':'bad');
+    details.push({ label: d.label, score, w });
+  });
+
+  const avg = totalW > 0 ? Math.round(totalS / totalW * 10) / 10 : 0;
+  const pct = Math.min(100, avg / 10 * 100);
+
+  document.getElementById('assess-empty2').style.display = 'none';
+  document.getElementById('assess-result').style.display = '';
+  document.getElementById('score-num').textContent = avg;
+  document.getElementById('score-num').style.color = avg>=7?'var(--green)':avg>=4.5?'var(--yellow)':'var(--red)';
+  document.getElementById('score-verdict').textContent = avg>=7?'推荐进入':avg>=4.5?'谨慎评估':'建议避开';
+  document.getElementById('score-verdict').style.color = avg>=7?'var(--green)':avg>=4.5?'var(--yellow)':'var(--red)';
+
+  const arc = document.getElementById('score-arc');
+  const circ = 2 * Math.PI * 38;
+  arc.setAttribute('stroke-dasharray', circ+' '+circ);
+  arc.setAttribute('stroke-dashoffset', circ*(1-pct/100));
+  arc.setAttribute('stroke', avg>=7?'var(--green)':avg>=4.5?'var(--yellow)':'var(--red)');
+
+  document.getElementById('assess-details').innerHTML = details.map(d => {
+    const cls = d.score>=8?'good':d.score>=5?'warn':'bad';
+    return `<div class="assess-row"><div class="assess-dot ${cls}"></div><span style="flex:1;font-size:0.7rem">${d.label}</span><span style="font-size:0.65rem;color:var(--ink3)">权重${d.w.toFixed(1)}</span><span style="font-weight:600;font-size:0.7rem;width:28px;text-align:right">${d.score}</span></div>`;
+  }).join('');
+}
+
+// ─── Competitors ───
+function addCompetitor() {
+  const c = {
+    asin: document.getElementById('c-asin').value.trim() || '--',
+    price: +document.getElementById('c-price').value || 0,
+    bsr: +document.getElementById('c-bsr').value || 0,
+    reviews: +document.getElementById('c-rev').value || 0,
+    rating: +document.getElementById('c-rating').value || 0,
+    age: +document.getElementById('c-age').value || 0,
+    sales: +document.getElementById('c-sales').value || 0,
+    daily: Math.round((+document.getElementById('c-sales').value || 0) / 30)
+  };
+  competitors.unshift(c);
+  if (competitors.length > 20) competitors = competitors.slice(0, 20);
+  SS('competitors', competitors);
+  ['c-asin','c-price','c-bsr','c-rev','c-rating','c-age','c-sales'].forEach(id => document.getElementById(id).value='');
+  renderCompetitors();
+}
+
+function removeCompetitor(i) { competitors.splice(i,1); SS('competitors',competitors); renderCompetitors(); }
+
+function renderCompetitors() {
+  const tbody = document.getElementById('comp-tbody');
+  const wrap = document.getElementById('comp-table-wrap');
+  const empty = document.getElementById('comp-empty2');
+  if (!competitors.length) { wrap.style.display='none'; empty.style.display=''; document.getElementById('radar-empty').style.display=''; return; }
+  empty.style.display='none'; wrap.style.display='';
+  const best = Math.min(...competitors.map(c=>c.bsr||999999));
+  tbody.innerHTML = competitors.map((c,i) => `<tr>
+    <td>${c.asin}</td><td>$${c.price.toFixed(2)}</td>
+    <td class="${c.bsr===best&&c.bsr>0?'g':''}">#${c.bsr||'--'}</td>
+    <td>${c.reviews||'--'}</td><td>${c.rating?'★'+c.rating.toFixed(1):'--'}</td>
+    <td>${c.age||'--'}天</td><td>${c.sales||'--'}</td><td>${c.daily||'--'}</td>
+    <td><button class="btn btn-d btn-s" onclick="removeCompetitor(${i})">×</button></td>
+  </tr>`).join('');
+  drawRadar();
+}
+
+function drawRadar() {
+  const canvas = document.getElementById('radar-canvas');
+  const ctx = canvas.getContext('2d');
+  const empty = document.getElementById('radar-empty');
+  if (competitors.length < 2) { empty.style.display = ''; canvas.style.display = 'none'; return; }
+  empty.style.display = 'none'; canvas.style.display = '';
+
+  const dims = ['售价', 'BSR逆', '评论逆', '评分', '上架逆', '月销'];
+  const colors = ['oklch(38% 0.12 252)', 'oklch(56% 0.16 160)', 'oklch(48% 0.18 20)', 'oklch(70% 0.14 82)'];
+  const cx = 180, cy = 180, r = 130;
+
+  // Normalize: for BSR/age, lower is better → invert
+  const maxVals = dims.map((_, di) => {
+    const vals = competitors.map(c => {
+      const raw = [c.price, c.bsr||9999, c.reviews||9999, c.rating||0, c.age||999, c.sales||0][di];
+      return di < 3 ? 1/(raw+1) : raw; // invert BSR/reviews
+    });
+    return Math.max(...vals, 0.001);
+  });
+
+  ctx.clearRect(0, 0, 360, 360);
+  // Grid
+  for (let g = 0.2; g <= 1; g += 0.2) {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const ang = Math.PI * 2 / 6 * i - Math.PI / 2;
+      const x = cx + r * g * Math.cos(ang), y = cy + r * g * Math.sin(ang);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = 'var(--border)'; ctx.lineWidth = 0.5; ctx.stroke();
+  }
+  // Axes
+  for (let i = 0; i < 6; i++) {
+    const ang = Math.PI * 2 / 6 * i - Math.PI / 2;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + r * Math.cos(ang), cy + r * Math.sin(ang));
+    ctx.strokeStyle = 'var(--border)'; ctx.stroke();
+    ctx.fillStyle = 'var(--ink3)'; ctx.font = '10px ' + getComputedStyle(document.body).fontFamily;
+    ctx.textAlign = 'center';
+    ctx.fillText(dims[i], cx + (r+18) * Math.cos(ang), cy + (r+18) * Math.sin(ang) + 4);
+  }
+  // Data
+  competitors.forEach((c, ci) => {
+    ctx.beginPath();
+    for (let i = 0; i < 6; i++) {
+      const raw = [c.price, c.bsr||9999, c.reviews||9999, c.rating||0, c.age||999, c.sales||0][i];
+      const val = i < 3 ? 1/(raw+1) : raw;
+      const norm = Math.min(1, val / maxVals[i]);
+      const ang = Math.PI * 2 / 6 * i - Math.PI / 2;
+      const x = cx + r * norm * Math.cos(ang), y = cy + r * norm * Math.sin(ang);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    ctx.strokeStyle = colors[ci % 4]; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = colors[ci % 4]; ctx.globalAlpha = 0.1; ctx.fill(); ctx.globalAlpha = 1;
+  });
+}
+
+// ─── Ad Simulator ───
+function simAds() {
+  const price = +document.getElementById('as-price').value || 0;
+  const netNoAd = +document.getElementById('as-net-no-ad').value || 0;
+  const cpc = +document.getElementById('as-cpc').value || 0;
+  const cvr = (+document.getElementById('as-cvr').value || 1) / 100;
+  const targetAcos = (+document.getElementById('as-target-acos').value || 20) / 100;
+
+  if (!price || !netNoAd) { document.getElementById('ads-result').style.display=''; document.getElementById('ads-content').style.display='none'; return; }
+
+  const clicksNeeded = cvr > 0 ? Math.ceil(1 / cvr) : 99;
+  const costPerOrder = cpc * clicksNeeded;
+  const actualAcos = price > 0 ? costPerOrder / price * 100 : 0;
+  const net = netNoAd - costPerOrder;
+  const maxCpc = targetAcos > 0 ? (price * targetAcos) / clicksNeeded : 0;
+  const daily = cpc * 20;
+
+  document.getElementById('ads-result').style.display = 'none';
+  document.getElementById('ads-content').style.display = '';
+  document.getElementById('ars-clicks').textContent = clicksNeeded + ' 次';
+  document.getElementById('ars-cost-per-order').textContent = '$' + costPerOrder.toFixed(2);
+  document.getElementById('ars-net').textContent = '$' + net.toFixed(2);
+  document.getElementById('ars-net').className = 'rv ' + (net>1?'g':net>0?'a':'r');
+  document.getElementById('ars-acos').textContent = actualAcos.toFixed(1) + '%';
+  document.getElementById('ars-max-cpc').textContent = '$' + maxCpc.toFixed(2);
+  document.getElementById('ars-daily').textContent = '$' + daily.toFixed(2);
+}
+
+// ─── Reverse Calc ───
+function reverseCalc() {
+  const costRmb = +document.getElementById('rv-cost').value || 0;
+  const freightRmb = +document.getElementById('rv-freight').value || 0;
+  const fba = +document.getElementById('rv-fba').value || 0;
+  const commR = (+document.getElementById('rv-comm').value || 15) / 100;
+  const acos = (+document.getElementById('rv-acos').value || 0) / 100;
+  const retR = (+document.getElementById('rv-ret').value || 0) / 100;
+  const fx = +document.getElementById('rv-fx').value || 7.25;
+  const target = (+document.getElementById('rv-target').value || 15) / 100;
+
+  const costUsd = costRmb / fx + freightRmb / fx;
+  // net = price - price*commR - fba - costUsd - price*acos - price*retR
+  // net = price*(1 - commR - acos - retR) - fba - costUsd
+  // net = price * target
+  // price * target = price*(1 - commR - acos - retR) - fba - costUsd
+  // price * (1 - commR - acos - retR - target) = fba + costUsd
+  const denom = 1 - commR - acos - retR - target;
+  const minPrice = denom > 0 ? (fba + costUsd) / denom : 0;
+
+  if (!minPrice) { document.getElementById('rv-result').style.display=''; document.getElementById('rv-content').style.display='none'; return; }
+
+  const totalCost = minPrice * (commR + acos + retR) + fba + costUsd;
+  const net = minPrice - totalCost;
+  const safe = minPrice * 1.1;
+
+  document.getElementById('rv-result').style.display = 'none';
+  document.getElementById('rv-content').style.display = '';
+  document.getElementById('rvs-price').textContent = '$' + minPrice.toFixed(2);
+  document.getElementById('rvs-cost').textContent = '$' + totalCost.toFixed(2);
+  document.getElementById('rvs-net').textContent = '$' + net.toFixed(2);
+  document.getElementById('rvs-safe').textContent = '$' + safe.toFixed(2);
+
+  [19.99, 24.99, 29.99].forEach((p, i) => {
+    const c = p * (commR + acos + retR) + fba + costUsd;
+    const n = p - c;
+    document.getElementById('rvs-at'+[1999,2499,2999][i]).textContent = '$' + n.toFixed(2) + ' (' + (n/p*100).toFixed(1) + '%)';
+  });
+}
+
+// ─── Inventory ───
+function invCalc() {
+  const daily = +document.getElementById('iv-daily').value || 0;
+  const prod = +document.getElementById('iv-prod').value || 0;
+  const sea = +document.getElementById('iv-sea').value || 0;
+  const fbaIn = +document.getElementById('iv-fba-in').value || 0;
+  const safetyDays = +document.getElementById('iv-safety').value || 0;
+  const current = +document.getElementById('iv-current').value || 0;
+
+  if (!daily) { document.getElementById('iv-result').style.display=''; document.getElementById('iv-content').style.display='none'; return; }
+
+  const cycle = prod + sea + fbaIn;
+  const cycleSales = daily * cycle;
+  const safetyQty = daily * safetyDays;
+  const reorder = cycleSales + safetyQty;
+  const qty = Math.max(0, reorder - current);
+  const daysLeft = current / daily;
+
+  document.getElementById('iv-result').style.display = 'none';
+  document.getElementById('iv-content').style.display = '';
+  document.getElementById('ivs-cycle').textContent = cycle + ' 天';
+  document.getElementById('ivs-cycle-sales').textContent = Math.round(cycleSales) + ' 件';
+  document.getElementById('ivs-safety-qty').textContent = Math.round(safetyQty) + ' 件';
+  document.getElementById('ivs-reorder').textContent = Math.round(reorder) + ' 件';
+  document.getElementById('ivs-qty').textContent = Math.round(qty) + ' 件';
+  document.getElementById('ivs-days-left').textContent = Math.round(daysLeft) + ' 天';
+}
+
+// ─── History & Export/Import ───
+function renderHistory() {
+  const c = document.getElementById('history-list');
+  if (!products.length) { c.innerHTML = '<div class="empty-state"><div class="empty-icon">🗆</div><div class="empty-title">暂无记录</div></div>'; return; }
+  c.innerHTML = products.map((p,i) => `<div class="history-item">
+    <div><div class="hn">${p.name}</div><div class="hm">$${p.price.toFixed(2)} | ¥${p.costRmb.toFixed(0)}成本 | ${new Date(p.ts).toLocaleDateString()}</div></div>
+    <div style="text-align:right"><div class="hn ${p.net>1?'g':p.net>0?'a':'r'}">$${p.net.toFixed(2)}/件</div><div class="hm">净利 ${p.nm.toFixed(1)}%</div></div>
+  </div>`).join('');
+}
+
+function clearHistory() { if(confirm('清空所有记录？')){ products=[]; SS('products',products); renderHistory(); renderCompare(); } }
+
+function exportData() {
+  const blob = new Blob([JSON.stringify({ products, competitors, lastResult }, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'fba-backup-' + new Date().toISOString().slice(0,10) + '.json'; a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.products) { products = data.products; SS('products', products); }
+      if (data.competitors) { competitors = data.competitors; SS('competitors', competitors); }
+      if (data.lastResult) { lastResult = data.lastResult; SS('lastResult', lastResult); }
+      renderHistory(); renderCompetitors(); renderCompare();
+      alert('导入成功！产品 '+products.length+' 个，竞品 '+competitors.length+' 个');
+    } catch(ex) { alert('文件格式错误'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ─── Tabs ───
+const tabs = [
+  { id: 'profit', label: '利润计算' },
+  { id: 'assess', label: '选品评估' },
+  { id: 'compete', label: '竞品对比' },
+  { id: 'ads', label: '广告模拟' },
+  { id: 'reverse', label: '盈亏倒推' },
+  { id: 'inv', label: '库存补货' },
+  { id: 'history', label: '记录' },
+];
+
+document.getElementById('tab-nav').innerHTML = tabs.map(t =>
+  `<button class="tab-btn${t.id==='profit'?' active':''}" data-tab="${t.id}" role="tab" aria-selected="${t.id==='profit'}">${t.label}</button>`
+).join('');
+
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    btn.setAttribute('aria-selected','true');
-    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+    btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+    document.getElementById('panel-'+btn.dataset.tab).classList.add('active');
     if (btn.dataset.tab === 'history') renderHistory();
     if (btn.dataset.tab === 'compete') renderCompetitors();
   });
 });
 
-// ─── Profit Calculator ───
-function calcProfit() {
-  const price = parseFloat(document.getElementById('in-price').value) || 0;
-  const costRmb = parseFloat(document.getElementById('in-cost-rmb').value) || 0;
-  const freightRmb = parseFloat(document.getElementById('in-freight-rmb').value) || 0;
-  const fba = parseFloat(document.getElementById('in-fba').value) || 0;
-  const commissionRate = parseFloat(document.getElementById('in-commission-rate').value) / 100;
-  const acos = (parseFloat(document.getElementById('in-acos').value) || 0) / 100;
-  const returnRate = (parseFloat(document.getElementById('in-return-rate').value) || 0) / 100;
-  const exchange = parseFloat(document.getElementById('in-exchange').value) || 7.25;
-  const monthlySales = parseFloat(document.getElementById('in-monthly-sales').value) || 0;
-
-  const commission = price * commissionRate;
-  const costUsd = costRmb / exchange;
-  const freightUsd = freightRmb / exchange;
-  const ads = price * acos;
-  const returns = price * returnRate;
-
-  const totalCost = commission + fba + costUsd + freightUsd + ads + returns;
-  const netProfit = price - totalCost;
-  const grossMargin = (price - commission - fba) / price * 100;
-  const netMargin = netProfit / price * 100;
-  const beAcos = ((price - commission - fba - costUsd - freightUsd - returns) / price * 100);
-  const monthlyProfit = netProfit * monthlySales;
-
-  lastResult = { price, costRmb, freightRmb, fba, commissionRate, acos, returnRate, exchange, monthlySales,
-    commission, costUsd, freightUsd, ads, returns, netProfit, grossMargin, netMargin, beAcos, monthlyProfit,
-    timestamp: Date.now() };
-  saveData('lastResult', lastResult);
-
-  document.getElementById('result-empty').style.display = 'none';
-  document.getElementById('result-content').style.display = 'block';
-
-  document.getElementById('res-net-profit').textContent = '$' + netProfit.toFixed(2);
-  document.getElementById('res-net-profit').className = 'big-number ' + (netProfit > 1 ? 'green' : netProfit > 0 ? 'accent' : 'red');
-
-  document.getElementById('res-price').textContent = '$' + price.toFixed(2);
-  document.getElementById('res-commission').textContent = '-$' + commission.toFixed(2);
-  document.getElementById('res-fba').textContent = '-$' + fba.toFixed(2);
-  document.getElementById('res-cost').textContent = '-$' + costUsd.toFixed(2) + ' (¥' + costRmb.toFixed(2) + ')';
-  document.getElementById('res-freight').textContent = '-$' + freightUsd.toFixed(2) + ' (¥' + freightRmb.toFixed(2) + ')';
-  document.getElementById('res-ads').textContent = '-$' + ads.toFixed(2) + ' (' + (acos*100).toFixed(1) + '%)';
-  document.getElementById('res-returns').textContent = '-$' + returns.toFixed(2) + ' (' + (returnRate*100).toFixed(1) + '%)';
-  document.getElementById('res-gross-margin').textContent = grossMargin.toFixed(1) + '%';
-  document.getElementById('res-net-margin').textContent = netMargin.toFixed(1) + '%';
-  document.getElementById('res-be-acos').textContent = beAcos.toFixed(1) + '%';
-  document.getElementById('res-monthly').textContent = '$' + monthlyProfit.toFixed(0);
-
-  updateKPIs(grossMargin, netMargin, beAcos, netProfit, monthlyProfit);
-
-  // Autofill assessment from profit calc
-  if (price > 0) {
-    const asPrice = price < 15 ? 2 : price <= 25 ? 6 : price <= 45 ? 9 : 4;
-    document.getElementById('as-price-band').value = asPrice;
-  }
-}
-
-function updateKPIs(gm, nm, bac, np, mp) {
-  const setKpi = (id, val, cls) => {
-    const el = document.getElementById(id);
-    el.textContent = val;
-    el.className = 'kpi-value ' + cls;
-  };
-  setKpi('kpi-gross-margin', gm.toFixed(1) + '%', 'accent');
-  setKpi('kpi-net-margin', nm.toFixed(1) + '%', nm > 10 ? 'green' : nm > 0 ? 'yellow' : 'red');
-  setKpi('kpi-breakeven-acos', bac.toFixed(1) + '%', 'accent');
-  setKpi('kpi-net-profit', '$' + np.toFixed(2), np > 1 ? 'green' : np > 0 ? 'yellow' : 'red');
-  setKpi('kpi-monthly-profit', '$' + mp.toFixed(0), mp > 500 ? 'green' : mp > 0 ? 'accent' : 'red');
-}
-
-function saveProduct() {
-  if (!lastResult) { alert('请先计算利润'); return; }
-  const name = prompt('给这个产品起个名字（如：手持风扇-黑色）：', '产品 ' + new Date().toLocaleDateString());
-  if (!name) return;
-  lastResult.name = name;
-  products.unshift(lastResult);
-  saveData('products', products);
-  alert('已保存：「' + name + '」');
-  renderHistory();
-}
-
-// ─── Assessment ───
-function runAssessment() {
-  const dims = ['as-bsr','as-reviews','as-rating','as-price-band','as-brand-conc','as-search-vol','as-seasonal','as-weight'];
-  const labels = ['BSR排名','评论壁垒','评分空间','价格带','品牌集中度','搜索量','季节性','重量'];
-  let total = 0, max = 0;
-  const details = [];
-
-  dims.forEach((id, i) => {
-    const el = document.getElementById(id);
-    const score = parseInt(el.value);
-    const label = el.options[el.selectedIndex].text;
-    total += score;
-    max += 10;
-    let cls = score >= 8 ? 'good' : score >= 5 ? 'warn' : 'bad';
-    details.push({ label: labels[i], detail: label, score, cls });
-  });
-
-  const avg = Math.round(total / dims.length * 10) / 10;
-  const pct = total / max * 100;
-
-  document.getElementById('assess-empty').style.display = 'none';
-  document.getElementById('assess-result').style.display = 'block';
-  document.getElementById('score-number').textContent = avg;
-  document.getElementById('score-number').style.color = avg >= 7 ? 'var(--green)' : avg >= 4.5 ? 'var(--yellow)' : 'var(--red)';
-
-  const verdict = avg >= 7 ? '推荐进入' : avg >= 4.5 ? '谨慎评估' : '建议避开';
-  document.getElementById('score-verdict').textContent = verdict;
-  document.getElementById('score-verdict').style.color = avg >= 7 ? 'var(--green)' : avg >= 4.5 ? 'var(--yellow)' : 'var(--red)';
-
-  const arc = document.getElementById('score-arc');
-  const circumference = 2 * Math.PI * 42;
-  const offset = circumference * (1 - pct / 100);
-  arc.setAttribute('stroke-dasharray', circumference + ' ' + circumference);
-  arc.setAttribute('stroke-dashoffset', offset);
-  arc.setAttribute('stroke', avg >= 7 ? 'var(--green)' : avg >= 4.5 ? 'var(--yellow)' : 'var(--red)');
-
-  const listEl = document.getElementById('assess-details');
-  listEl.innerHTML = details.map(d =>
-    '<div class="assess-row"><div class="assess-dot ' + d.cls + '"></div><span class="assess-label">' + d.label + '</span><span class="assess-val">' + d.detail + ' (' + d.score + '/10)</span></div>'
-  ).join('');
-}
-
-// ─── Competitors ───
-function addCompetitor() {
-  const asin = document.getElementById('comp-asin').value.trim();
-  const price = parseFloat(document.getElementById('comp-price').value) || 0;
-  const bsr = parseInt(document.getElementById('comp-bsr').value) || 0;
-  const reviews = parseInt(document.getElementById('comp-reviews').value) || 0;
-  const rating = parseFloat(document.getElementById('comp-rating').value) || 0;
-  const age = parseInt(document.getElementById('comp-age').value) || 0;
-  const sales = parseInt(document.getElementById('comp-sales').value) || 0;
-
-  if (!asin && !price) return;
-
-  competitors.unshift({ asin: asin || '--', price, bsr, reviews, rating, age, sales, dailySales: sales > 0 ? Math.round(sales/30) : 0 });
-  if (competitors.length > 20) competitors = competitors.slice(0, 20);
-  saveData('competitors', competitors);
-
-  ['comp-asin','comp-price','comp-bsr','comp-reviews','comp-rating','comp-age','comp-sales'].forEach(id => document.getElementById(id).value = '');
-  renderCompetitors();
-}
-
-function removeCompetitor(idx) {
-  competitors.splice(idx, 1);
-  saveData('competitors', competitors);
-  renderCompetitors();
-}
-
-function renderCompetitors() {
-  const tbody = document.getElementById('comp-tbody');
-  const empty = document.getElementById('comp-empty');
-  const wrap = document.getElementById('comp-table-wrap');
-
-  if (competitors.length === 0) {
-    empty.style.display = '';
-    wrap.hidden = true;
-    return;
-  }
-
-  empty.style.display = 'none';
-  wrap.hidden = false;
-
-  const bestBsr = competitors.length > 0 ? Math.min(...competitors.map(c => c.bsr || 999999)) : 0;
-
-  tbody.innerHTML = competitors.map((c, i) => {
-    const bsrClass = c.bsr === bestBsr && c.bsr > 0 ? 'rank-high' : '';
-    const daily = c.sales > 0 ? Math.round(c.sales / 30) : 0;
-    return `<tr>
-      <td>${c.asin}</td>
-      <td>$${c.price.toFixed(2)}</td>
-      <td class="${bsrClass}">#${c.bsr || '--'}</td>
-      <td>${c.reviews || '--'}</td>
-      <td>${c.rating ? '★ '+c.rating.toFixed(1) : '--'}</td>
-      <td>${c.age || '--'}天</td>
-      <td>${c.sales || '--'}</td>
-      <td>${daily || '--'}</td>
-      <td><button class="btn btn-danger btn-sm" onclick="removeCompetitor(${i})">×</button></td>
-    </tr>`;
-  }).join('');
-}
-
-// ─── History ───
-function renderHistory() {
-  const container = document.getElementById('history-list');
-  if (products.length === 0) {
-    container.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128466;</div><div class="empty-title">暂无记录</div><div class="empty-desc">在利润计算器中点击「保存到记录」</div></div>';
-    return;
-  }
-  container.innerHTML = products.map((p, i) => {
-    const cls = p.netProfit > 1 ? 'green' : p.netProfit > 0 ? 'accent' : 'red';
-    return `<div class="history-item">
-      <div><div class="history-name">${p.name}</div><div class="history-meta">售价 $${p.price.toFixed(2)} | ¥${p.costRmb.toFixed(0)}成本 | ${new Date(p.timestamp).toLocaleDateString()}</div></div>
-      <div><div class="history-profit ${cls}">$${p.netProfit.toFixed(2)}/件</div><div class="history-meta" style="text-align:right">净利 ${p.netMargin.toFixed(1)}%</div></div>
-    </div>`;
-  }).join('');
-}
-
-function clearHistory() {
-  if (confirm('确定清空所有保存的产品记录？此操作不可恢复。')) {
-    products = [];
-    saveData('products', products);
-    renderHistory();
-  }
-}
-
 // ─── Init ───
-window.addEventListener('DOMContentLoaded', () => {
+function init() {
   // Restore last result
   if (lastResult) {
-    document.getElementById('in-price').value = lastResult.price || '';
-    document.getElementById('in-cost-rmb').value = lastResult.costRmb || '';
-    document.getElementById('in-freight-rmb').value = lastResult.freightRmb || '';
-    document.getElementById('in-fba').value = lastResult.fba || '';
-    document.getElementById('in-commission-rate').value = (lastResult.commissionRate * 100) || 15;
-    document.getElementById('in-acos').value = (lastResult.acos * 100) || '';
-    document.getElementById('in-return-rate').value = (lastResult.returnRate * 100) || '';
-    document.getElementById('in-exchange').value = lastResult.exchange || 7.25;
-    document.getElementById('in-monthly-sales').value = lastResult.monthlySales || '';
-    if (lastResult.price > 0) {
-      document.getElementById('result-empty').style.display = 'none';
-      document.getElementById('result-content').style.display = 'block';
-      document.getElementById('res-net-profit').textContent = '$' + lastResult.netProfit.toFixed(2);
-      document.getElementById('res-net-profit').className = 'big-number ' + (lastResult.netProfit > 1 ? 'green' : lastResult.netProfit > 0 ? 'accent' : 'red');
-      document.getElementById('res-price').textContent = '$' + lastResult.price.toFixed(2);
-      document.getElementById('res-commission').textContent = '-$' + lastResult.commission.toFixed(2);
-      document.getElementById('res-fba').textContent = '-$' + lastResult.fba.toFixed(2);
-      document.getElementById('res-cost').textContent = '-$' + lastResult.costUsd.toFixed(2) + ' (¥' + lastResult.costRmb.toFixed(2) + ')';
-      document.getElementById('res-freight').textContent = '-$' + lastResult.freightUsd.toFixed(2) + ' (¥' + lastResult.freightRmb.toFixed(2) + ')';
-      document.getElementById('res-ads').textContent = '-$' + lastResult.ads.toFixed(2) + ' (' + (lastResult.acos*100).toFixed(1) + '%)';
-      document.getElementById('res-returns').textContent = '-$' + lastResult.returns.toFixed(2) + ' (' + (lastResult.returnRate*100).toFixed(1) + '%)';
-      document.getElementById('res-gross-margin').textContent = lastResult.grossMargin.toFixed(1) + '%';
-      document.getElementById('res-net-margin').textContent = lastResult.netMargin.toFixed(1) + '%';
-      document.getElementById('res-be-acos').textContent = lastResult.beAcos.toFixed(1) + '%';
-      document.getElementById('res-monthly').textContent = '$' + lastResult.monthlyProfit.toFixed(0);
-      updateKPIs(lastResult.grossMargin, lastResult.netMargin, lastResult.beAcos, lastResult.netProfit, lastResult.monthlyProfit);
-    }
+    document.getElementById('p-name').value = lastResult.name || '';
+    document.getElementById('p-price').value = lastResult.price || '';
+    document.getElementById('p-cost').value = lastResult.costRmb || '';
+    document.getElementById('p-freight').value = lastResult.freightRmb || '';
+    document.getElementById('p-fba').value = lastResult.fba || '';
+    document.getElementById('p-comm').value = (lastResult.commR*100) || 15;
+    document.getElementById('p-acos').value = (lastResult.acos*100) || '';
+    document.getElementById('p-ret').value = (lastResult.retR*100) || '';
+    document.getElementById('p-fx').value = lastResult.fx || 7.25;
+    document.getElementById('p-mo').value = lastResult.mo || '';
+    if (lastResult.price > 0) calcProfit();
   }
 
-  // Auto-calc on input change (debounced)
-  let debounceTimer;
-  const profitInputs = ['in-price','in-cost-rmb','in-freight-rmb','in-fba','in-commission-rate','in-acos','in-return-rate','in-exchange','in-monthly-sales'];
+  // Autosave on input
+  const profitInputs = ['p-price','p-cost','p-freight','p-fba','p-comm','p-acos','p-ret','p-fx','p-mo'];
+  let timer;
   profitInputs.forEach(id => {
-    document.getElementById(id).addEventListener('input', () => {
-      clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(calcProfit, 400);
-    });
+    document.getElementById(id).addEventListener('input', () => { clearTimeout(timer); timer = setTimeout(calcProfit, 400); });
   });
 
   renderCompetitors();
   renderHistory();
-});
+  renderCompare();
+}
+
+init();
 </script>
 </body>
 </html>
