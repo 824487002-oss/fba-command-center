@@ -338,7 +338,7 @@ if(darkMode){document.documentElement.setAttribute('data-theme','dark');document
 
 // ─── FBA ───
 function toggleFbaMode(){const m=document.getElementById('p-fba-mode').value;document.getElementById('fba-tier-group').style.display=m==='tier'?'':'none';document.getElementById('fba-exact-group').style.display=m==='exact'?'':'none';}
-function autoFba(){const t=document.getElementById('p-fba-tier').value;if(document.getElementById('p-fba-mode').value==='tier')document.getElementById('p-fba').value=SITES[site].fba[t];calcProfit();}
+function autoFba(){const t=document.getElementById('p-fba-tier').value;if(document.getElementById('p-fba-mode').value==='tier'){document.getElementById('p-fba').value=SITES[site].fba[t];const estStorage={small:'0.03',large:'0.15','sml-oversize':'0.50'};if(!document.getElementById('p-storage').value)document.getElementById('p-storage').value=estStorage[t];}calcProfit();}
 function calcExactFba(){const l=+document.getElementById('p-dim-l').value||0,w=+document.getElementById('p-dim-w').value||0,h=+document.getElementById('p-dim-h').value||0,wt=+document.getElementById('p-dim-wt').value||0;const dimWt=Math.round(l*w*h/139*100)/100, billWt=Math.max(wt,dimWt);let fee=billWt<=0.75?3.22:billWt<=1?4.10:billWt<=2?5.32:billWt<=3?6.08:billWt<=10?7.25:billWt<=20?8.66:billWt<=50?12.90:16.80;if(l>18||w>14||h>8||wt>20)fee=billWt<=50?12.90:billWt<=70?16.80:billWt<=150?35.00:48.00;document.getElementById('p-fba').value=fee.toFixed(2);const cuft=(l*w*h)/1728;const m=new Date().getMonth()+1;const rate=m>=10&&m<=12?2.40:0.87;const storage=cuft*rate;document.getElementById('p-storage').value=storage.toFixed(4);calcProfit();}
 
 // ─── Profit ───
