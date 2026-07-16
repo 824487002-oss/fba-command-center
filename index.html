@@ -103,6 +103,7 @@
 <header class="header">
   <div class="header-l"><span class="header-brand">FBA Command Center</span><span class="header-by">by <span>Jimmy Chen</span></span></div>
   <div class="header-r">
+    <button class="btn btn-p btn-s" onclick="printPDF()" title="导出PDF报告">📄 PDF</button>
     <select class="site-select" id="global-site" onchange="onSiteChange()">
       <option value="us">US</option><option value="uk">UK</option><option value="de">DE</option><option value="jp">JP</option>
     </select>
@@ -153,7 +154,6 @@
     <div style="display:flex;gap:0.4rem;margin-top:0.8rem">
       <button class="btn btn-p" onclick="calcProfit()">计算</button>
       <button class="btn btn-g" onclick="saveProduct()">保存</button>
-      <button class="btn btn-g" onclick="window.print()">打印</button>
     </div>
   </div>
   <div>
@@ -334,6 +334,7 @@ function onSiteChange(){site=document.getElementById('global-site').value;SS('si
 
 // ─── Theme ───
 function toggleTheme(){darkMode=!darkMode;document.documentElement.setAttribute('data-theme',darkMode?'dark':'light');document.getElementById('theme-btn').textContent=darkMode?'☀️':'🌙';SS('dark',darkMode);}
+function printPDF(){const wasDark=darkMode;if(wasDark){darkMode=false;document.documentElement.setAttribute('data-theme','light');document.getElementById('theme-btn').textContent='🌙';}const panels=document.querySelectorAll('.tab-panel'),btns=document.querySelectorAll('.tab-btn');const activePanel=document.querySelector('.tab-panel.active'),activeBtn=document.querySelector('.tab-btn.active');panels.forEach(p=>p.classList.add('active'));btns.forEach(b=>{b.classList.add('active');b.setAttribute('aria-selected','true');});window.print();panels.forEach(p=>p.classList.remove('active'));btns.forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});if(activePanel)activePanel.classList.add('active');if(activeBtn){activeBtn.classList.add('active');activeBtn.setAttribute('aria-selected','true');}if(wasDark){darkMode=true;document.documentElement.setAttribute('data-theme','dark');document.getElementById('theme-btn').textContent='☀️';}}
 if(darkMode){document.documentElement.setAttribute('data-theme','dark');document.getElementById('theme-btn').textContent='☀️';}
 
 // ─── FBA ───
